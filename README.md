@@ -1,6 +1,10 @@
 # ADF4351
 Arduino Library for the ADF4351 Wideband Frequency Synthesizer chip
 
+v1.0.0 First release
+
+v1.0.1 Double buffering of RF frequency divider implemented by default
+
 ## Introduction
 
 This library supports the ADF4351 from Analog Devices on Arduinos. The chip is a wideband (34.375 MHz to 4.4 GHz) Phase-Locked Loop (PLL) and Voltage Controlled Oscillator (VCO), covering a very wide frequency range under digital control. Just add an external PLL loop filter, Reference frequency source and a power supply for a very useful frequency generator for applications as a Local Oscillator or Sweep Generator.  
@@ -28,7 +32,7 @@ A low phase noise stable oscillator is required for this module. Typically, an O
 
 An example program using the library is provided in the source directory [example4351.ino](src/example4351.ino).
 
-init(SSpin, LockPinNumber, Lock_Pin_Used, CEpin, CE_Pin_Used): initialize the ADF4351 with SPI SS pin, lock pin and true/false for lock pin use and CE pin use - CE pin is typically LOW (disabled) on reset if used
+init(SSpin, LockPinNumber, Lock_Pin_Used, CEpin, CE_Pin_Used): initialize the ADF4351 with SPI SS pin, lock pin and true/false for lock pin use and CE pin use - CE pin is typically LOW (disabled) on reset if used; depending on your board, this pin along with the RF Power Down pin may have a pullup or pulldown resistor fitted and certain boards have the RF Power Down pin (low active) on the header
 
 SetStepFreq(frequency): sets the step frequency in Hz - default is 100 kHz - returns an error code
 
@@ -50,6 +54,11 @@ ReadSweepValues(*regs): high speed read for registers when used for frequency sw
 Please note that you should install the provided BigNumber library in your Arduino library directory.
 
 Under worst possible conditions (tested with 2.200006102 GHz RF/25 MHz PFD/0 Hz tolerance target error which will go through the entire permissible range of MOD values) on a 16 MHz AVR Arduino, precision frequency mode configuration takes no longer than 45 seconds.
+
+Default settings which may need to be changed as required BEFORE execution of ADF4355 library functions (defaults listed):
+
+Phase Detector Polarity (Register 4/Bit 6 = 1): Negative (passive or noninverting active loop filter)
+
 
 Error codes:
 
