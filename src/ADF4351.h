@@ -60,6 +60,11 @@
 
 #define ADF4351_RegsToWrite 5UL // for high speed sweep
 
+// ReadCurrentFrequency
+#define ADF4351_DIGITS 10
+#define ADF4351_DECIMAL_PLACES 6
+#define ADF4351_ReadCurrentFrequency_ArraySize (ADF4351_DIGITS + ADF4351_DECIMAL_PLACES + 2) // including decimal point and null terminator
+
 /*!
    @brief ADF4351 chip device driver
 
@@ -115,6 +120,7 @@ class ADF4351
 
     void WriteSweepValues(const uint32_t *regs);
     void ReadSweepValues(uint32_t *regs);
+    void ReadCurrentFrequency(uint8_t *freq);
 
     SPISettings ADF4351_SPI;
 

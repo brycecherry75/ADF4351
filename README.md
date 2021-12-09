@@ -5,6 +5,8 @@ v1.0.0 First release
 
 v1.0.1 Double buffering of RF frequency divider implemented by default
 
+v1.1.0 Added current frequency read function
+
 ## Introduction
 
 This library supports the ADF4351 from Analog Devices on Arduinos. The chip is a wideband (34.375 MHz to 4.4 GHz) Phase-Locked Loop (PLL) and Voltage Controlled Oscillator (VCO), covering a very wide frequency range under digital control. Just add an external PLL loop filter, Reference frequency source and a power supply for a very useful frequency generator for applications as a Local Oscillator or Sweep Generator.  
@@ -50,6 +52,8 @@ setrf(frequency, R_divider, ReferenceDivisionType): set the reference frequency 
 WriteSweepValues(*regs): high speed write for registers when used for frequency sweep (*regs is uint32_t and size is as per ADF4351_RegsToWrite)
 
 ReadSweepValues(*regs): high speed read for registers when used for frequency sweep (*regs is uint32_t and size is as per ADF4351_RegsToWrite)
+
+ReadCurrentFreq(*freq): calculation of currently programmed frequency (*freq is uint8_t and size is as per ADF4351_ReadCurrentFrequency_ArraySize)
 
 Please note that you should install the provided BigNumber library in your Arduino library directory.
 

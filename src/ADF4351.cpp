@@ -130,6 +130,48 @@ double ADF4351::ReadPFDfreq() {
   return value;
 }
 
+void ADF4351::ReadCurrentFrequency(uint8_t *freq)
+{
+  BigNumber::begin(12);
+  char tmpstr[12];
+  ultoa(ADF4351_reffreq, tmpstr, 10);
+  BigNumber BN_ref = BigNumber(tmpstr);
+  if (ReadRDIV2() != 0 && ReadRefDoubler() == 0) {
+    BN_ref /= BigNumber(2);
+  }
+  else if (ReadRDIV2() == 0 && ReadRefDoubler() != 0) {
+    BN_ref *= BigNumber(2);
+  }
+  BN_ref /= BigNumber(ReadR());
+  BigNumber BN_freq = BN_ref;
+  BN_freq *= BigNumber(ReadInt());
+  BN_ref *= BigNumber(ReadFraction());
+  BN_ref /= BigNumber(ReadMod());
+  BN_freq += BN_ref;
+  BN_freq /= BigNumber(ReadOutDivider());
+  BigNumber BN_rounding = BigNumber("0.5");
+  for (int i = 0; i < ADF4351_DECIMAL_PLACES; i++) {
+    BN_rounding /= BigNumber(10);
+  }
+  BN_freq += BN_rounding;
+  char* temp = BN_freq.toString();
+  BigNumber::finish();
+  uint8_t DecimalPlaceToStart;
+  for (int i = 0; i < (ADF4351_DIGITS + 1); i++){
+    freq[i] = temp[i];
+    if (temp[i] == '.') {
+      DecimalPlaceToStart = i;
+      DecimalPlaceToStart++;
+      break;
+    }
+  }
+  for (int i = DecimalPlaceToStart; i < (DecimalPlaceToStart + ADF4351_DECIMAL_PLACES); i++) {
+    freq[i] = temp[i];
+  }
+  freq[(DecimalPlaceToStart + ADF4351_DECIMAL_PLACES)] = 0x00;
+  free(temp);
+}
+
 void ADF4351::init(uint8_t SSpin, uint8_t LockPinNumber, bool Lock_Pin_Used, uint8_t CEpinNumber, bool CE_Pin_Used)
 {
   ADF4351_PIN_SS = SSpin;

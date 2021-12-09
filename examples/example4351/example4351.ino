@@ -116,6 +116,10 @@ void PrintVFOstatus() {
   Serial.println(vfo.ADF4351_ChanStep);
   Serial.print(F("Frequency error (Hz): "));
   Serial.println(vfo.ADF4351_FrequencyError);
+  Serial.print(F("Current frequency (Hz): "));
+  char CurrentFreq[ADF4351_ReadCurrentFrequency_ArraySize];
+  vfo.ReadCurrentFrequency(CurrentFreq);
+  Serial.println(CurrentFreq);
 }
 
 void PrintErrorCode(byte value) {
