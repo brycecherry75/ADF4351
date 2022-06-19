@@ -7,6 +7,8 @@ v1.0.1 Double buffering of RF frequency divider implemented by default
 
 v1.1.0 Added current frequency read function
 
+v1.1.1 Corrected issue with conversion in ReadCurrentFreq
+
 ## Introduction
 
 This library supports the ADF4351 from Analog Devices on Arduinos. The chip is a wideband (34.375 MHz to 4.4 GHz) Phase-Locked Loop (PLL) and Voltage Controlled Oscillator (VCO), covering a very wide frequency range under digital control. Just add an external PLL loop filter, Reference frequency source and a power supply for a very useful frequency generator for applications as a Local Oscillator or Sweep Generator.  

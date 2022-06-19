@@ -130,7 +130,7 @@ double ADF4351::ReadPFDfreq() {
   return value;
 }
 
-void ADF4351::ReadCurrentFrequency(uint8_t *freq)
+void ADF4351::ReadCurrentFrequency(char *freq)
 {
   BigNumber::begin(12);
   char tmpstr[12];
