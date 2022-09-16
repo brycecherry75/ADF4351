@@ -9,6 +9,8 @@ v1.1.0 Added current frequency read function
 
 v1.1.1 Corrected issue with conversion in ReadCurrentFreq
 
+v1.1.2 Add setPowerLevel function which can be used for frequency bursts
+
 ## Introduction
 
 This library supports the ADF4351 from Analog Devices on Arduinos. The chip is a wideband (34.375 MHz to 4.4 GHz) Phase-Locked Loop (PLL) and Voltage Controlled Oscillator (VCO), covering a very wide frequency range under digital control. Just add an external PLL loop filter, Reference frequency source and a power supply for a very useful frequency generator for applications as a Local Oscillator or Sweep Generator.  
@@ -47,9 +49,11 @@ ReadOutDivider_PowerOf2() is a binary exponent
 
 ReadPFDfreq(): returns a double for the PFD value
 
-setf(*frequency, PowerLevel, AuxPowerLevel, AuxFrequencyDivider, PrecisionFrequency, FrequencyTolerance, CalculationTimeout): set the frequency (in Hz with char string - decimal places will be ignored) power level/auxiliary power level (1-4 in 3dBm steps from -5dBm), mode for auxiliary frequency output (ADF4351_AUX_(DIVIDED/FUNDAMENTAL)), true/false for precision frequency mode (step size is ignored if true), frequency tolerance (in Hz with uint32_t) under precision frequency mode (rounded to the nearest integer), calculation timeout (in mS with uint32_t - recommended value is 45000 in most cases, 0 to disable) under precision frequency mode - returns an error or warning code
+setf(*frequency, PowerLevel, AuxPowerLevel, AuxFrequencyDivider, PrecisionFrequency, FrequencyTolerance, CalculationTimeout): set the frequency (in Hz with char string - decimal places will be ignored) power level/auxiliary power level (1-4 in 3dBm steps from -5dBm or 0 to disable), mode for auxiliary frequency output (ADF4351_AUX_(DIVIDED/FUNDAMENTAL)), true/false for precision frequency mode (step size is ignored if true), frequency tolerance (in Hz with uint32_t) under precision frequency mode (rounded to the nearest integer), calculation timeout (in mS with uint32_t - recommended value is 45000 in most cases, 0 to disable) under precision frequency mode - returns an error or warning code
 
 setrf(frequency, R_divider, ReferenceDivisionType): set the reference frequency and reference divider R and reference frequency division type (ADF4351_REF_(UNDIVIDED/HALF/DOUBLE)) - default is 10 MHz/1/undivided - returns an error code
+
+setPowerLevel/setAuxPowerLevel(PowerLevel): set the power level (0 to disable or 1-4) and write to the ADF4355 in one operation - returns an error code
 
 WriteSweepValues(*regs): high speed write for registers when used for frequency sweep (*regs is uint32_t and size is as per ADF4351_RegsToWrite)
 

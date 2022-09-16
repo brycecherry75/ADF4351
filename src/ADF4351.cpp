@@ -533,3 +533,31 @@ int ADF4351::setrf(uint32_t f, uint16_t r, uint8_t ReferenceDivisionType) {
   }
   return ADF4351_ERROR_NONE;
 }
+
+int ADF4351::setPowerLevel(uint8_t PowerLevel) {
+  if (PowerLevel < 0 && PowerLevel > 4) return ADF4351_ERROR_POWER_LEVEL;
+  if (PowerLevel == 0) {
+    ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(5, 1, ADF4351_R[0x04], 0);
+  }
+  else {
+    PowerLevel--;
+    ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(5, 1, ADF4351_R[0x04], 1);
+    ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(3, 2, ADF4351_R[0x04], PowerLevel);
+  }
+  WriteRegs();
+  return ADF4351_ERROR_NONE;
+}
+
+int ADF4351::setAuxPowerLevel(uint8_t PowerLevel) {
+  if (PowerLevel < 0 && PowerLevel > 4) return ADF4351_ERROR_POWER_LEVEL;
+  if (PowerLevel == 0) {
+    ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(8, 1, ADF4351_R[0x04], 0);
+  }
+  else {
+    PowerLevel--;
+    ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(6, 2, ADF4351_R[0x04], PowerLevel);
+    ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(8, 1, ADF4351_R[0x04], 1);
+  }
+  WriteRegs();
+  return ADF4351_ERROR_NONE;
+}
