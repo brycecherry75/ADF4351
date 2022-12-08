@@ -14,6 +14,7 @@ ReadFrequencyError	KEYWORD2
 ReadCurrentFrequency	KEYWORD2
 setf	KEYWORD2
 setrf	KEYWORD2
+setfDirect	KEYWORD2
 setPowerLevel	KEYWORD2
 setAuxPowerLevel	KEYWORD2
 ReadSweepValues	KEYWORD2

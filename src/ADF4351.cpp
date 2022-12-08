@@ -534,6 +534,51 @@ int ADF4351::setrf(uint32_t f, uint16_t r, uint8_t ReferenceDivisionType) {
   return ADF4351_ERROR_NONE;
 }
 
+void ADF4351::setfDirect(uint16_t R_divider, uint16_t INT_value, uint16_t MOD_value, uint16_t FRAC_value, uint8_t RF_DIVIDER_value, uint8_t PRESCALER_value, bool FRACTIONAL_MODE) {
+  switch (RF_DIVIDER_value) {
+    case 1:
+      RF_DIVIDER_value = 0;
+      break;
+    case 2:
+      RF_DIVIDER_value = 1;
+      break;
+    case 4:
+      RF_DIVIDER_value = 2;
+      break;
+    case 8:
+      RF_DIVIDER_value = 3;
+      break;
+    case 16:
+      RF_DIVIDER_value = 4;
+      break;
+    case 32:
+      RF_DIVIDER_value = 5;
+      break;
+    case 64:
+      RF_DIVIDER_value = 6;
+      break;
+  }
+  ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(14, 10, ADF4351_R[0x02], R_divider);
+  ADF4351_R[0x00] = BitFieldManipulation.WriteBF_dword(15, 16, ADF4351_R[0x00], INT_value);
+  ADF4351_R[0x01] = BitFieldManipulation.WriteBF_dword(3, 12, ADF4351_R[0x01], MOD_value);
+  ADF4351_R[0x00] = BitFieldManipulation.WriteBF_dword(3, 12, ADF4351_R[0x00], FRAC_value);
+  ADF4351_R[0x04] = BitFieldManipulation.WriteBF_dword(20, 3, ADF4351_R[0x04], RF_DIVIDER_value);
+  ADF4351_R[0x01] = BitFieldManipulation.WriteBF_dword(27, 1, ADF4351_R[0x01], PRESCALER_value);
+  if (FRACTIONAL_MODE == false)  {
+    ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(7, 1, ADF4351_R[0x02], 1); // LDP, int-n mode
+    ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(8, 1, ADF4351_R[0x02], 1); // ldf, int-n mode
+    ADF4351_R[0x03] = BitFieldManipulation.WriteBF_dword(21, 1, ADF4351_R[0x03], 1); //  charge cancel, reduces pfd spurs
+    ADF4351_R[0x03] = BitFieldManipulation.WriteBF_dword(22, 1, ADF4351_R[0x03], 1); //  ABP, int-n
+  }
+  else {
+    ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(7, 1, ADF4351_R[0x02], 0); // LDP, frac-n mode
+    ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(8, 1, ADF4351_R[0x02], 0); // ldf, frac-n mode
+    ADF4351_R[0x03] = BitFieldManipulation.WriteBF_dword(21, 1, ADF4351_R[0x03], 0); //  charge cancel
+    ADF4351_R[0x03] = BitFieldManipulation.WriteBF_dword(22, 1, ADF4351_R[0x03], 0); //  ABP, frac-n
+  }
+  WriteRegs();
+}
+
 int ADF4351::setPowerLevel(uint8_t PowerLevel) {
   if (PowerLevel < 0 && PowerLevel > 4) return ADF4351_ERROR_POWER_LEVEL;
   if (PowerLevel == 0) {
