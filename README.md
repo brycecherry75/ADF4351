@@ -13,6 +13,8 @@ v1.1.2 Add setPowerLevel function which can be used for frequency bursts
 
 v1.1.3 Added direct entry of frequency parameters for precalculated frequencies of the highest possible precision
 
+v1.1.4 Added configuration of charge pump current and phase detector polarity
+
 ## Introduction
 
 This library supports the ADF4351 from Analog Devices on Arduinos. The chip is a wideband (34.375 MHz to 4.4 GHz) Phase-Locked Loop (PLL) and Voltage Controlled Oscillator (VCO), covering a very wide frequency range under digital control. Just add an external PLL loop filter, Reference frequency source and a power supply for a very useful frequency generator for applications as a Local Oscillator or Sweep Generator.  
@@ -64,6 +66,10 @@ WriteSweepValues(*regs): high speed write for registers when used for frequency 
 ReadSweepValues(*regs): high speed read for registers when used for frequency sweep (*regs is uint32_t and size is as per ADF4351_RegsToWrite)
 
 ReadCurrentFreq(*freq): calculation of currently programmed frequency (*freq is uint8_t and size is as per ADF4351_ReadCurrentFrequency_ArraySize)
+
+setCPcurrent(Current): set charge pump current in mA floating
+
+setPDpolarity(INVERTING/NONINVERTING): set phase detector polarity for your VCO loop filter
 
 A Python script (ADF4351pf.py) can be used for calculating the required values for setfDirect for speed.
 

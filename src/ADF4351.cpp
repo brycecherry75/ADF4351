@@ -606,3 +606,29 @@ int ADF4351::setAuxPowerLevel(uint8_t PowerLevel) {
   WriteRegs();
   return ADF4351_ERROR_NONE;
 }
+
+int ADF4351::setCPcurrent(float Current) {
+  if (Current < 0.3125) {
+    Current = 0.3125;
+  }
+  if (Current > 5) {
+    Current = 5;
+  }
+  Current /= 0.3125;
+  Current -= 0.5; // 0 = 0.32 mA per step rounded
+  uint8_t CPcurrent = Current;
+  ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(9, 4, ADF4351_R[0x02], CPcurrent);
+  WriteRegs();
+  return ADF4351_ERROR_NONE;
+}
+
+int ADF4351::setPDpolarity(uint8_t PDpolarity) {
+  if (PDpolarity == ADF4351_LOOP_TYPE_INVERTING || PDpolarity == ADF4351_LOOP_TYPE_NONINVERTING) {
+    ADF4351_R[0x02] = BitFieldManipulation.WriteBF_dword(6, 1, ADF4351_R[0x02], PDpolarity);
+    WriteRegs();
+    return ADF4351_ERROR_NONE;
+  }
+  else {
+    return ADF4351_ERROR_POLARITY_INVALID;
+  }
+}

@@ -26,6 +26,8 @@
 #define ADF4351_REF_UNDIVIDED 0
 #define ADF4351_REF_HALF 1
 #define ADF4351_REF_DOUBLE 2
+#define ADF4351_LOOP_TYPE_INVERTING 0
+#define ADF4351_LOOP_TYPE_NONINVERTING 1
 
 // common to all of the following subroutines
 #define ADF4351_ERROR_NONE 0
@@ -57,6 +59,9 @@
 // setf and setrf
 #define ADF4351_ERROR_PFD_AND_STEP_FREQUENCY_HAS_REMAINDER 19
 #define ADF4351_ERROR_PFD_LIMITS 20
+
+// setPDpolarity
+#define ADF4351_ERROR_POLARITY_INVALID 21
 
 #define ADF4351_RegsToWrite 5UL // for high speed sweep
 
@@ -124,6 +129,8 @@ class ADF4351
     void WriteSweepValues(const uint32_t *regs);
     void ReadSweepValues(uint32_t *regs);
     void ReadCurrentFrequency(char *freq);
+    int setCPcurrent(float Current);
+    int setPDpolarity(uint8_t PDpolarity);
 
     SPISettings ADF4351_SPI;
 
